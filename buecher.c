@@ -24,10 +24,11 @@ int main() {
 
    Buch   buecher[MAXBUCH];   /* array der B�cher */
    Autor  autoren[MAXAUTOR];  /* array der unterschiedlichen Autoren */
-   Verlag verlage[MAXVERLAG];/* array der unterschiedlichen Verlage */
+   Verlag verlage[MAXVERLAG]; /* array der unterschiedlichen Verlage */
    int num_buch   = 0;        /* Anzahl eingelesener B�cher */
    int num_autor  = 0;        /* Anzahl eingelesener, unterschiedl. Autoren */
    int num_verlag = 0;        /* Anzahl eingelesener, unterschiedl. Verlage */
+
    FILE *infile;              /* filepointer Eingabedatei */
    char infilename[] = "buecherliste.csv";
 
@@ -64,20 +65,17 @@ int main() {
 
    printf("=== Eingelesene Buecher ===\n");
    buecher_print(buecher, num_buch);
+
    printf("=== Top%d Verlage sortiert nach Anzahl Buecher ===\n", NUMTOP);
-
-   qsort(verlage,num_verlag,sizeof(Verlag),compare1) ;
-
-   print_top_Verlage(verlage ,NUMTOP) ;
-
-   printf("\n") ;
-
+   /* TODO */
+   printf("\n");
 
    printf("=== Top%d Autoren sortiert nach Anzahl Buecher ===\n", NUMTOP);
-   qsort(autoren,num_autor,sizeof(Autor),compare2) ;
-
-
-   print_top_Autoren(autoren ,NUMTOP ) ;
+   perm_autoren(&num_autor,autoren) ; 
+   
+  
+   
+   
    printf("\n\n");
 
    return 0;
