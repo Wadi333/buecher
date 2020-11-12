@@ -7,6 +7,7 @@
 
 #include "buecher_func.h"
 #define MAX_AUTOR 300
+#define MAX_VERLAG 100
 /***********************************************************************/
 static int i = 0;
 Autor *autor_link(Autor autoren[], int *num_autor, char *autorname)
@@ -25,6 +26,23 @@ Autor *autor_link(Autor autoren[], int *num_autor, char *autorname)
    autoren[*num_autor].anz_buecher = 1;
    if (*num_autor < MAX_AUTOR-1)
    return &(autoren[(*num_autor)++]);
+}
+Verlag *verlag_link(Verlag verlage[], int *num_verlag, char *verlagname)
+{
+   for (i = 0; i < *num_verlag; i++)
+   {
+      if (strcmp(verlage[i].name, verlagname) == 0)
+      {
+
+         verlage[i].anz_buecher += 1;
+         return &verlage[i];
+      }
+   }
+
+   verlage[*num_verlag].name = strdup(verlagname);
+   verlage[*num_verlag].anz_buecher = 1;
+   if (*num_verlag < MAX_VERLAG-1)
+   return &(verlage[(*num_verlag)++]);
 }
 
 void buecher_read(FILE *infile,
@@ -96,17 +114,11 @@ void buch_add(char linebuf[],
    buecher[*num_buch].titel = strdup(strtok(linebuf, delim));
    char *autorname = strtok(NULL, delim);
    buecher[*num_buch].autor = autor_link(autoren, num_autor, autorname);
-   buecher[*num_buch].verlag = NULL;
-   buecher[*num_buch].erscheinungsjahr = 0;
+   char *verlagname = strtok(NULL, delim);
+   buecher[*num_buch].verlag = verlag_link(verlage,num_verlag,verlagname);
+   buecher[*num_buch].erscheinungsjahr = atoi(strdup(strtok(NULL, delim)));
    buecher[*num_buch].isbn = NULL;
-   /* Autor im bisherigen Autoren-Feld suchen, ggfs. neu anlegen,
-    * pointer darauf im akt. Buch speichern */
-   /* TODO */
-
-   /* Verlag im bisherigen Verlage-Feld suchen, ggfs. neu anlegen,
-    * pointer darauf im akt. Buch speichern */
-   /* TODO */
-
+  
    (*num_buch)++;
 }
 
@@ -136,5 +148,33 @@ void buch_print(const Buch *b)
           (b->autor != NULL ? b->autor->name : "*unbekannt*"),
           b->erscheinungsjahr, b->titel);
 }
+
+int cmp_autor_anzbuch (const void * a, const void * b)
+{
+  Autor *A = (Autor *)a;
+  Autor *B = (Autor *)b;
+  return ( B->anz_buecher - A->anz_buecher);
+}
+
+void perm_autoren(int* num_autor, Autor autoren[])
+{
+   int i ;
+   
+   Autor *permA = (Autor *)malloc(sizeof(Autor *) * *num_autor);
+   for (i = 0; i < *num_autor; i++) {
+      
+      permA[i] = (autoren[i]);
+      //printf("%d\n",i) ;
+      //printf("permA : %s %d \n autoren : %s %d\n",permA[i].name,permA[i].anz_buecher, autoren[i].name , autoren[i].anz_buecher);
+   }
+   printf("Test") ;
+   qsort(permA, *num_autor, sizeof(permA[0]), cmp_autor_anzbuch);
+   
+   printf("%d\n",permA[0].anz_buecher) ;
+       
+}
+
+
+
 
 /***********************************************************************/
