@@ -156,24 +156,22 @@ int cmp_autor_anzbuch (const void * a, const void * b)
   return ( B->anz_buecher - A->anz_buecher);
 }
 
-void perm_autoren(int* num_autor, Autor autoren[])
+void perm_autoren(int *num_autor, Autor autoren[])
 {
-   int i ;
-   
-   Autor *permA = (Autor *)malloc(sizeof(Autor *) * *num_autor);
-   for (i = 0; i < *num_autor; i++) {
-      
-      permA[i] = (autoren[i]);
-      //printf("%d\n",i) ;
-      //printf("permA : %s %d \n autoren : %s %d\n",permA[i].name,permA[i].anz_buecher, autoren[i].name , autoren[i].anz_buecher);
-   }
-   printf("Test") ;
-   qsort(permA, *num_autor, sizeof(permA[0]), cmp_autor_anzbuch);
-   
-   printf("%d\n",permA[0].anz_buecher) ;
-       
-}
+   int i;
 
+   Autor **permA = malloc(sizeof(Autor *) * *num_autor);
+   for (i = 0; i < *num_autor; i++)
+   {
+      permA[i] = &autoren[i];
+   }
+   qsort(permA, *num_autor, sizeof(permA[0]), cmp_autor_anzbuch);
+
+    for (i=0; i <*num_autor;i++)
+    {
+       printf(" %s %d\n",permA[i]->name,permA[i]->anz_buecher);
+    }
+}
 
 
 
